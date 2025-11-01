@@ -1,41 +1,23 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      <title>Registration Form</title>
-      <link rel="stylesheet" href="index.css" />
-      <script src="index.js" defer></script>
-    </head>
-    <body>
-        <div class="container">
-            <h1 class="form-heading">Registration Form</h1>
-            <form id="registrationform">
-                <div class="input-container">
-                    <label for="name">Full name</label>
-                    <input type="text" id="name" placeholder="Enter your name"/>
-                    <p class="error-message" id="nameErrorMsg">*Required</p>
-                </div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Page</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Enter Name" required>
+      <input type="email" id="email" placeholder="Enter Email" required>
+      <input type="password" id="password" placeholder="Enter Password" required>
+      <button type="submit">Register</button>
+    </form>
+    <p id="responseMsg"></p>
+  </div>
 
-                <div class="input-container">
-                    <label for="email">email</label>
-                    <input type="text" id="email" placeholder="Enter your email"/>
-                    <p class="error-message" id="emailErrorMsg">*Required</p>
-                </div>
-
-                <div class="input-container">
-                    <label for="password">password</label>
-                    <input type="password" id="password" placeholder="Enter password"/>
-                    <p class="error-message" id="passwordErrorMsg">*Required</p>
-                </div>
-                <div class="input-container">
-                    <label for="age">Age</label>
-                    <input type="text" id="age" placeholder="Enter age"/>
-                    <p class="error-message" id="ageErrorMsg">*Required</p>
-                    
-                </div>
-                <button type="submit" class="submit-btn">Submit</button>
-
-            </form>
-
-        </div>
-    </body>
+  <script src="index.js"></script>
+</body>
 </html>

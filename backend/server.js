@@ -1,61 +1,57 @@
 const express = require("express");
-const mysql = require("mysql"); // MySQL package
-const bodyParser = require("body-parser"); // To parse JSON requests
-const bcrypt = require("bcrypt");
-
-const cors = require("cors"); // Optional: allow requests from frontend
+const cors = require("cors");
+const mysql = require("mysql");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt"); // ✅ Add this line
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// 1️⃣ Create MySQL connection
+// ✅ Connect to MySQL
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",     // XAMPP default
-  password: "",     // XAMPP default
-  database: "registration_db"  // Your DB name
+  user: "root",
+  password: "",
+  database: "registerdb"
 });
 
-// 2️⃣ Connect to MySQL
 db.connect((err) => {
-  if (err) {
-    console.error("DB Connection Error:", err.message);
-    process.exit(1);
-  }
-  console.log("✅ MySQL Connected Successfully");
+  if (err) throw err;
+  console.log("✅ MySQL Connected");
 });
 
 app.get("/", (req, res) => {
-  res.send("Server and MySQL connected!");
+  res.send("Server running and connected to MySQL!");
 });
 
+// ✅ Register endpoint (with password hashing)
 app.post("/register", async (req, res) => {
-  const { name, email, password, age } = req.body;
-  if (!name || !email || !password || !age) {
-    return res.json({ message: "All fields are required!" });
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).send("All fields are required!");
   }
-  try{
 
-    // 1️⃣ Hash password
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
+  try {
+    // 🔒 Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 2️⃣ Insert into DB
-    const query = "INSERT INTO users (name,email,password,age) VALUES (?,?,?,?)";
-    db.query(query, [name, email, hashedPassword, age], (err, result) => {
-      if (err) return res.json({ message: "Database error!" });
-      res.json({ message: "Registration Successful ✅" });
+    const sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+    db.query(sql, [name, email, hashedPassword], (err, result) => {
+      if (err) {
+        console.log("❌ DB Error:", err);
+        return res.status(500).send("Database error");
+      }
+      console.log("✅ Data Inserted:", result.insertId);
+      res.send("Registration Successful!");
     });
-
+  } catch (err) {
+    console.error("❌ Hash Error:", err);
+    res.status(500).send("Server error");
   }
-  catch (error) {
-    res.json({ message: "Error hashing password!" });
-  }
-
 });
 
-app.listen(3000, () => {
-  console.log("Server running at http://localhost:3000");
+app.listen(8080, () => {
+  console.log("✅ Server running at http://localhost:8080");
 });
-
-
