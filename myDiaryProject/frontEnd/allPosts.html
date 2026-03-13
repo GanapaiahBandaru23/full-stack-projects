@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Posts</title>
+</head>
+<body>
+  <h1>All Posts</h1>
+  <div id="posts"></div>
+  <a href="post.html">New Post</a>
+
+  <script>
+    fetch("http://localhost:3000/posts")
+      .then(r => r.json())
+      .then(posts => {
+        const div = document.getElementById("posts");
+        posts.forEach(p => {
+          div.innerHTML += `
+            <div>
+              <h3>${p.postTitle}</h3>
+              <p>${p.postDescription.substring(0, 80)}...</p>
+              <a href="dedicatedPage.html?id=${p.id}">View</a>
+            </div>
+            <hr>
+          `;
+        });
+      });
+  </script>
+</body>
+</html>
